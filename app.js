@@ -8,12 +8,15 @@ const { port } = require('./config.json');
 
 // Route imports
 import indexRoute from './routes/index.js';
+import apiRoute from './routes/api.js';
 
 const PORT = process.env.PORT || port;
 
 const app = express();
 
 // Set up routes
+app.use('/api', apiRoute);
+
 app.use('/', indexRoute);
 
 
