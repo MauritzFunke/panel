@@ -1,17 +1,23 @@
+// Module imports
 import express from 'express';
-import { port } from './config.json';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
+// Import configs
+const { port } = require('./config.json');
 
-const PORT = process.env.PORT || port
+// Route imports
+import indexRoute from './routes/index.js';
+
+const PORT = process.env.PORT || port;
 
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send("Hi!")
-})
+// Set up routes
+app.use('/', indexRoute);
 
 
 app.listen(PORT, (err) => {
     if(err) throw err;
-    else console.log(`Server is now running on port ${PORT}`)
-})
+    else console.log(`Server is now running on port ${PORT}`);
+});
