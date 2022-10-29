@@ -1,0 +1,55 @@
+<div class="container">
+    <h1>System statistics</h1>
+    <section id="summary">
+        <h3>Summary</h3>
+        <table class="table">
+            <tr>
+                <th>Users</th>
+                <td><%- statistics.users %></td>
+            </tr>
+            <tr>
+                <th>CPU model</th>
+                <td><%- statistics.cpu[0].model %></td>
+            </tr>
+            <tr>
+                <th>CPU cores</th>
+                <td><%- statistics.cpu.length %></td>
+            </tr>
+            <tr>
+                <th>CPU speed</th>
+                <td><%- statistics.cpu[0].speed %></td>
+            </tr>
+        </table>
+    </section>
+    <section id="cpu">
+        <h3>CPU Usage</h3>
+    </section>
+    <section id="ram">
+        <h3>RAM Usage</h3>
+    </section>
+    <section id="disk">
+        <h3>Disk Usage</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Filesystem</th>
+                    <th>Total</th>
+                    <th>Available</th>
+                    <th>Usage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% statistics.disks.forEach(disk => { %>
+                    <tr>
+                        <td><%- disk._filesystem %></td>
+                        <td><%- disk._blocks %></td>
+                        <td><%- disk._available %></td>
+                        <td><%- disk._used %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        
+    </section>
+</div>
