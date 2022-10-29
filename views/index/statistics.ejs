@@ -5,21 +5,102 @@
         <table class="table">
             <tr>
                 <th>Users</th>
-                <td><%- statistics.users %></td>
+                <td>
+                    <%= statistics.users %>
+                </td>
+            </tr>
+            <tr>
+                <th>Operating system</th>
+                <td><%= statistics.os.distro %></td>
+            </tr>
+            <tr>
+                <th>Network interfaces</th>
+                <td><%= statistics.interfaces.filter(interface => !interface.internal).length %></td>
+            </tr>
+            <tr>
+                <th>Total memory</th>
+                <td>
+                    <%= statistics.memory %>
+                </td>
             </tr>
             <tr>
                 <th>CPU model</th>
-                <td><%- statistics.cpu[0].model %></td>
+                <td>
+                    <%= statistics.cpu.brand %>
+                </td>
             </tr>
             <tr>
                 <th>CPU cores</th>
-                <td><%- statistics.cpu.length %></td>
+                <td>
+                    <%= statistics.cpu.physicalCores %>
+                </td>
+            </tr>
+            <tr>
+                <th>CPU threads</th>
+                <td>
+                    <%= statistics.cpu.cores %>
+                </td>
             </tr>
             <tr>
                 <th>CPU speed</th>
-                <td><%- statistics.cpu[0].speed %></td>
+                <td>
+                    <%= statistics.cpu.speed %>
+                </td>
             </tr>
+            <% if(!Number.isNaN(statistics.cpu.speedMin)) { %>
+                <tr>
+                    <th>CPU min speed</th>
+                    <td>
+                        <%= statistics.cpu.speedMin %>
+                    </td>
+                </tr>
+            <% } %>
+            <% if(!Number.isNaN(statistics.cpu.speedMax)) { %>
+                <tr>
+                    <th>CPU max speed</th>
+                    <td>
+                        <%= statistics.cpu.speedMax %>
+                    </td>
+                </tr>
+            <% } %>
         </table>
+    </section>
+    <section id="interfaces">
+        <h3>Network interfaces</h3>
+        <% statistics.interfaces.forEach(interface=> {%>
+            <% if(!interface.internal) { %>
+            <section id="interface:<%= interface.iface %>" class="mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= interface.iface %></h5>
+                        <table class="table">
+                            <tr>
+                                <th>Speed</th>
+                                <td><code><%= interface.speed %> MBit/s</code></td>
+                            </tr>
+                            <tr>
+                                <th>IPv4 Address</th>
+                                <td><code><%= interface.ip4 %></code></td>
+                            </tr>
+                            <tr>
+                                <th>IPv4 Subnet</th>
+                                <td><code><%= interface.ip4subnet %></code></td>
+                            </tr>
+                            <tr>
+                                <th>IPv6 Address</th>
+                                <td><code><%= interface.ip6 %></code></td>
+                            </tr>
+                            <tr>
+                                <th>IPv6 Subnet</th>
+                                <td><code><%= interface.ip6subnet %></code></td>
+                            </tr>
+                        </table>
+                        <a href="#" data-interface="<%= interface.iface %>" class="btn btn-primary">Open statistics</a>
+                    </div>
+                </div>
+            </section>
+            <% } %>
+        <%})%>
     </section>
     <section id="cpu">
         <h3>CPU Usage</h3>
@@ -29,27 +110,36 @@
     </section>
     <section id="disk">
         <h3>Disk Usage</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Filesystem</th>
-                    <th>Total</th>
-                    <th>Available</th>
-                    <th>Usage</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% statistics.disks.forEach(disk => { %>
+        <%# rework has to be done #%>
+            <table class="table">
+                <thead>
                     <tr>
-                        <td><%- disk._filesystem %></td>
-                        <td><%- disk._blocks %></td>
-                        <td><%- disk._available %></td>
-                        <td><%- disk._used %></td>
+                        <th>Filesystem</th>
+                        <th>Total</th>
+                        <th>Available</th>
+                        <th>Usage</th>
                     </tr>
-                <% }) %>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <% statistics.disks.forEach(disk=> { %>
+                        <tr>
+                            <td>
+                                <%- disk._filesystem %>
+                            </td>
+                            <td>
+                                <%- disk._blocks %>
+                            </td>
+                            <td>
+                                <%- disk._available %>
+                            </td>
+                            <td>
+                                <%- disk._used %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
 
-        
+
     </section>
 </div>

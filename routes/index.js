@@ -1,6 +1,9 @@
 import express from 'express';
 import * as system_statistics from '../helpers/statistics.js';
-import { bytesToSize, hertzToSpeed } from '../helpers/converters.js';
+import { bytesToSize } from '../helpers/converters.js';
+import si from 'systeminformation';
+
+
 const router = express.Router();
 
 const ROUTE_PREFIX = 'index/';
@@ -16,10 +19,13 @@ router.get('/statistics', async(req, res) => {
      - RAM Usage (diagram, api)
     */
     let statistics = {
-        interfaces: system_statistics.getInterfaces(),
-        users: (await system_statistics.getUsers()).length,
+        interfaces: (await si.networkInterfaces()),
+        os: (await si.osInfo()),
+        users: (await si.users()).length,
+        memory: 0,
         disks: [],
-        cpu: []
+        partitions: (await si.blockDevices()),
+        cpu: (await si.cpu())
     };
     (await system_statistics.getDiskUsage()).forEach(disk => {
         disk = {...disk};
@@ -29,10 +35,8 @@ router.get('/statistics', async(req, res) => {
         console.log(disk);
         statistics.disks.push(disk);
     });
-    system_statistics.getCPU().forEach(core => {
-        core.speed = hertzToSpeed(core.speed*1000*1000);
-        statistics.cpu.push(core);
-    });
+    statistics.memory = bytesToSize((await si.mem()).total);
+    console.log(statistics);
     res.render(ROUTE_PREFIX + 'statistics', {
         statistics
     });
