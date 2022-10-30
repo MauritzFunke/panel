@@ -104,9 +104,11 @@
     </section>
     <section id="cpu">
         <h3>CPU Usage</h3>
+        <canvas id="cpu-chart"></canvas>
     </section>
     <section id="ram">
         <h3>RAM Usage</h3>
+        <canvas id="ram-chart"></canvas>
     </section>
     <section id="disk">
         <h3>Disk Usage</h3>
@@ -143,3 +145,16 @@
 
     </section>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script src="/static/js/cpu.js"></script>
+<script src="/static/js/ram.js"></script>
+<script>
+    cpu("cpu-chart");
+    let cpuTimer = window.setInterval(()=> {
+            refreshCPU();
+    },1000);
+    ram("ram-chart");
+    let ramtimer = window.setInterval(()=> {
+            refreshRAM();
+    },1000);
+</script>

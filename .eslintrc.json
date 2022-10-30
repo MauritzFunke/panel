@@ -28,5 +28,8 @@
             "always"
         ]
     },
+    "ignorePatterns": [
+        "./static/js/*.js"
+    ],
     "parser": "@babel/eslint-parser"
 }
